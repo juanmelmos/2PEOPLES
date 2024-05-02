@@ -20,11 +20,11 @@ export default function Sidebar() {
       <nav>
         <ul>
           <li><Link
-            href="/home"
+            href="/pages"
             className={`${pathname === '/home' ? style.here : style.nothere}`}
           >Home</Link></li>
           <li><Link
-            href="/events"
+            href="/pages/events"
             className={`${pathname === '/events' ? style.here : style.nothere}`}
           >Events</Link></li>
           <li><Link

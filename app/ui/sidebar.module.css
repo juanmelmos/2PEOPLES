@@ -1,12 +1,3 @@
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 25% !important;
-  height: 100%;
-}
-
 .here {
   color : #0066CC;
   text-decoration-line: underline;
