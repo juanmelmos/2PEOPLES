@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../ui/globals.css";
 import style from "../ui/page.module.css";
 import Sidebar from "../components/sidebar";
 
@@ -17,11 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} ${style.page}`}>
-        <Sidebar/>
-        {children}
-        </body>
-    </html>
+    <div className={`${inter.className} ${style.page}`}>
+      <Sidebar />
+      {children}
+    </div>
   );
 }

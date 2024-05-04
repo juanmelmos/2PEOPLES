@@ -1,5 +1,4 @@
 import style from "../ui/page.module.css"
-import "../ui/globals.css"
 import "../ui/login.module.css"
 
 export default function Authentication() {
