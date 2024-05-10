@@ -6,7 +6,6 @@ import style from "../ui/events.module.css";
 export default async function Events() {
 
   const { rows } = await sql`SELECT * FROM eventos;`;
-  console.log(rows);
 
   return (
     <>

@@ -20,16 +20,16 @@ export default function Sidebar() {
       <nav>
         <ul>
           <li><Link
-            href="/home"
-            className={`${pathname === '/home' ? style.here : style.nothere}`}
-          >Home</Link></li>
-          <li><Link
-            href="/home/events"
-            className={`${pathname === '/home/events' ? style.here : style.nothere}`}
-          >Events</Link></li>
-          <li><Link
             href="/"
             className={`${pathname === '/' ? style.here : style.nothere}`}
+          >Home</Link></li>
+          <li><Link
+            href="/events"
+            className={`${pathname === '/events' ? style.here : style.nothere}`}
+          >Events</Link></li>
+          <li><Link
+            href="/login"
+            className={`${pathname === '/login' ? style.here : style.nothere}`}
           >Log In</Link></li>
         </ul>
       </nav>
