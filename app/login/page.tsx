@@ -13,7 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   const handleSubmit = useDebouncedCallback((user:string) => {
-    console.log(user + ' ' + password)
+    console.log(user)
   },500)
 
   return (

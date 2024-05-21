@@ -1,0 +1,15 @@
+.header {
+  text-align: center;
+  width: 100%;
+}
+
+.par {
+  margin-top: 2em;
+}
+
+.boxOut {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Hace que el div abarque toda la altura de la pantalla */
+}
