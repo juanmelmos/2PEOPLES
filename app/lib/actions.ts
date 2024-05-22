@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 // cliente
 
 export async function checkLogin(formdata: FormData) {
-  console.log('checkuser', formdata.get('user'))
   const rawFormData = {
     user: formdata.get('user'),
     password: formdata.get('password')
@@ -22,13 +21,11 @@ export async function checkLogin(formdata: FormData) {
   } else {
     const id = rows.at(0).id;
     setId(id);
-    console.log(getId());
     redirect('/');
   }
 }
 
 export async function register(formdata: FormData) {
-  console.log('checkuser', formdata.get('user'))
   const rawFormData = {
     user: formdata.get('user'),
     password: formdata.get('password')
@@ -44,5 +41,21 @@ export async function register(formdata: FormData) {
     redirect('/');
   } else {
     redirect('/register/failRegister');
+  }
+}
+
+export async function createEvent(formdata: FormData) {
+  const rawFormData = {
+    name: formdata.get('name'),
+    description: formdata.get('description'),
+    image: formdata.get('image'),
+    ubication: formdata.get('ubication')
+  };
+
+  const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
+  if (rows.length === 0) {
+    await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
+  } else {
+    redirect('/events/create/createError');
   }
 }

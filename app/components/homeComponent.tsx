@@ -16,7 +16,9 @@ console.log(logged);
         <p className={style.par}>Aquí encontrarás una vasta variedad de actividades diseñadas para todos
           los gustos y edades, desde conciertos vibrantes y festivales culturales,
           hasta talleres de arte, ferias gastronómicas y eventos deportivos.</p>
-          {logged ? <Link href="/events/create">Create a event</Link> : <Link href="/events/create">Login</Link>}
+          {logged ? <Link href="/events/create">Create a event</Link> : <Link href="/login">Login</Link>}
+          {logged ? <Link href="/events">See events</Link> : <Link href="/register">Register</Link>}
+          
       </div>
     </div>
   )
