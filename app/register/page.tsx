@@ -11,12 +11,12 @@ export default function Register() {
     <form action={register}>
       <label>
         Username:
-        <input type="text" name="user"/>
+        <input type="text" name="user" required/>
       </label>
       <br />
       <label>
         Password:
-        <input type="password" name="password"/>
+        <input type="password" name="password" required/>
       </label>
       <br />
       <button type="submit">Enviar</button>

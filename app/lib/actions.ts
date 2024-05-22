@@ -55,6 +55,7 @@ export async function createEvent(formdata: FormData) {
   const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
   if (rows.length === 0) {
     await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
+    redirect('/events')
   } else {
     redirect('/events/create/createError');
   }
