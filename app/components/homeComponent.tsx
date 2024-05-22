@@ -4,10 +4,7 @@ import { getId } from "../lib/data";
 
 export default function Home() {
 
-console.log(getId());
 const logged = getId() !== 0;
-console.log(logged);
-
 
   return (
     <div className={style.boxOut}>
