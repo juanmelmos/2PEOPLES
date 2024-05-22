@@ -4,6 +4,7 @@ import { sql } from "@vercel/postgres";
 import { setId } from "../lib/data";
 import { getId } from "../lib/data";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 // importante, la información alojada aquí no se ejecutan ni se envian al
 // cliente
@@ -55,7 +56,8 @@ export async function createEvent(formdata: FormData) {
   const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
   if (rows.length === 0) {
     await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
-    redirect('/events')
+    revalidatePath('/events');
+    redirect('/events');
   } else {
     redirect('/events/create/createError');
   }
