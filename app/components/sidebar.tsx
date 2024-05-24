@@ -19,8 +19,8 @@ export default function Sidebar({ idUser }: { idUser: number }) {
       className={style.logo}
         src="/logo.png"
         alt="Logo 2PEOPLES"
-        width={200}
-        height={200}
+        width={120}
+        height={120}
       />
       </div>
       <nav>
