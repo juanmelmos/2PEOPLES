@@ -1,9 +1,52 @@
 .here {
-  color : #0066CC;
-  text-decoration-line: underline;
+  background-color: #0066CC;
+  text-decoration-line: none;
 }
 
 .nothere {
-  color : initial;
+  color: initial;
   text-decoration-line: none;
+}
+
+.link {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+}
+
+.link:hover {
+  background-color: white;
+  color: black;
+}
+
+.logoContainer {
+  margin: 5ch auto;
+  display: flex;
+  justify-content: center;
+}
+
+.logOut {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.logOut:hover{
+  background-color: white;
+  color: black;
 }
