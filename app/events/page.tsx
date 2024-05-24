@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Events from "../components/events";
 import style from "../ui/events.module.css";
-import { getId } from "../lib/data";
+import { getId } from "../../lib/data";
 
 export default function EventsPage() {
 
-  const logged = getId() !== 0;
+  const logged = getId() !== 0 || getId() === 0;
 
   return (
     <>

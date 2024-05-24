@@ -1,8 +1,8 @@
 'use server'
 
 import { sql } from "@vercel/postgres";
-import { setId } from "../lib/data";
-import { getId } from "../lib/data";
+import { setId } from "./data";
+import { getId } from "./data";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -22,6 +22,9 @@ export async function checkLogin(formdata: FormData) {
   } else {
     const id = rows.at(0).id;
     setId(id);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('idUser', id.toString());
+    }
     redirect('/');
   }
 }
@@ -55,6 +58,7 @@ export async function createEvent(formdata: FormData) {
 
   const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
   if (rows.length === 0) {
+    console.log(getId());
     await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
     revalidatePath('/events');
     redirect('/events');

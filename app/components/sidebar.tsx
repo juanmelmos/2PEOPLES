@@ -5,9 +5,13 @@ import Link from "next/link";
 import style from "../ui/sidebar.module.css";
 import styleHeader from "../ui/page.module.css";
 import { usePathname } from "next/navigation";
+import { getId } from "../../lib/data";
 
 
 export default function Sidebar() {
+
+  const logged = getId() !== 0;
+
   const pathname = usePathname();
   return (
     <header className={styleHeader.sidebar}>
@@ -27,7 +31,8 @@ export default function Sidebar() {
             href="/events"
             className={`${pathname === '/events' ? style.here : style.nothere}`}
           >Events</Link></li>
-          <li><Link
+          <li>
+            <Link
             href="/login"
             className={`${pathname === '/login' ? style.here : style.nothere}`}
           >Log In</Link></li>

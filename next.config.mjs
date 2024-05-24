@@ -16,29 +16,4 @@ const nextConfig = {
   },
 };
 
-
-// const nextConfig = {
-//   images: {
-//     domains: [
-//       "img.freepik.com",
-//       "images.pexels.com"
-//     ],
-//   },
-// };
-
-// module.exports = {
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: 'https',
-//         hostname: '**',
-//       },
-//       {
-//         protocol: 'http',
-//         hostname: '**',
-//       },
-//     ],
-//   },
-// };
-
 export default nextConfig;

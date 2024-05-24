@@ -3,7 +3,7 @@
 import "../ui/globals.css";
 import "../ui/page.module.css"
 import style from "../ui/login-register.module.css"
-import { checkLogin } from "../lib/actions";
+import { checkLogin } from "../../lib/actions";
 
 export default function Login() {
 
