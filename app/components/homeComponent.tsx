@@ -2,23 +2,8 @@
 
 import Link from "next/link"
 import style from "../ui/home.module.css"
-import { getId } from "../../lib/data";
-import React, { useEffect, useState } from 'react';
-import { getIdUser } from '../utils/userUtils';
 
-export default function Home() {
-
-  const [idUser, setIdUser] = useState<number>(0);
-
-  console.log(getIdUser());
-  
-
-  useEffect(() => {
-    setIdUser(getIdUser());
-  }, []);
-
-  console.log(idUser);
-
+export default function Home({ idUser }: { idUser: number }) {
   return (
     <div className={style.boxOut}>
       <div className={style.boxIn}>

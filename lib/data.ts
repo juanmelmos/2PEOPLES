@@ -1,7 +1,9 @@
+import { getIdUserActual } from "./actions";
+
 let idUser= 0;
 
 export function getId() : number{
-  return idUser;
+  return +getIdUserActual();
 }
 
 export function setId(id:number) {
