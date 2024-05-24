@@ -1,3 +1,5 @@
+/* Para la página con el header */
+
 .main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -35,4 +37,48 @@
   border-radius: 5px;
   transition: background-color 0.3s, color 0.3s;
   min-height: 50px;
+}
+
+/* Para el componente de los eventos */
+
+.event {
+  position: relative;
+}
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.overlayContent {
+  display: none;
+  transform: translateY(100%);
+}
+
+.event:hover .overlay {
+  top: 0;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.event:hover .overlayContent {
+  display: block;
+  transform: translateY(0);
+}
+
+.eventTitle {
+  margin-bottom: 10px;
 }

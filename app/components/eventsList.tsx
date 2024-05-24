@@ -10,15 +10,22 @@ export default async function Events() {
   return (
     <>
       {rows.map((row, index) => (
-        <div key={index} className={style.event}><h2>{row.nombre}</h2>
-          <p>{row.descripcion}</p>
-          <p>{row.ubicacion}</p>
-          <Image
-            src={row.foto}
-            alt={row.descripcion}
-            width={300}
-            height={200}
-          />
+        <div key={index} className={style.event}>
+          <div className={style.imageContainer}>
+            <Image
+              src={row.foto}
+              alt={row.descripcion}
+              width={300}
+              height={200}
+            />
+            <div className={style.overlay}>
+              <h2 className={style.eventTitle}>{row.nombre}</h2>
+              <div className={style.overlayContent}>
+                <p>{row.descripcion}</p>
+                <p>{row.ubicacion}</p>
+              </div>
+            </div>
+          </div>
         </div>
       ))}
     </>
