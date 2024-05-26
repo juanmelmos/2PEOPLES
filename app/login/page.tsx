@@ -25,7 +25,7 @@ export default function Login() {
           <br />
           <button className={style.send} type="submit">Send</button>
         </form>
-        <p>I don't have an account, <Link href="/register" className={style.link}>register</Link></p>
+        <p>I don&apos;t have an account, <Link href="/register" className={style.link}>register</Link></p>
       </div>
     </div>
   );
