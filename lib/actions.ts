@@ -19,10 +19,10 @@ export async function checkLogin(formdata: FormData) {
   console.log(rawFormData.user, rawFormData.password);
 
   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-  if (!rows || rows.length === 0) {
+  if (rows.length === 0) {
     redirect('/login/failLogin');
   } else {
-    const id = rows.at(0).id;
+    const id = rows.at(0)?.id;
     setId(id);
     setIdUserActual(id);
     revalidatePath('/')
@@ -40,10 +40,10 @@ export async function register(formdata: FormData) {
   console.log(rawFormData.user, rawFormData.password);
 
   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-  if (!rows || rows.length === 0) {
+  if (rows.length === 0) {
     await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-    const id = rows.at(0).id;
+    const id = rows.at(0)?.id;
     setId(id);
     revalidatePath('/')
     redirect('/');
@@ -103,5 +103,5 @@ export async function setIdUserActual(id:number) {
 
 export async function getIdUserActual() {
   const { rows } = await sql`SELECT valor FROM idUser where id=0;`;
-  return rows.at(0).valor;
+  return rows.at(0)?.valor;
 }
