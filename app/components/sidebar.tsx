@@ -34,6 +34,11 @@ export default function Sidebar({ idUser }: { idUser: number }) {
             className={`${pathname === '/events' ? style.here : style.nothere} ${style.link}`}
           >Events</Link></li>
         </ul>
+        {idUser === 1 ?
+        <Link
+        href="/admin"
+        className={`${pathname === '/admin' ? style.here : style.nothere} ${style.link}`}
+      >Managing events</Link> : null}
         {idUser !== 0 ?
         <form action={logOut}>
           <button type="submit" className={style.logOut}>LogOut</button>

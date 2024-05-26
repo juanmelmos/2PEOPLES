@@ -81,6 +81,17 @@ export async function createEvent(formdata: FormData) {
   }
 }
 
+// eliminar un evento
+
+export async function deleteEvent(formdata: FormData) {
+  const rawFormData = {
+    id: formdata.get('eventId')
+  };
+    await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
+    revalidatePath('/events');
+    redirect('/events');
+}
+
 //Hacer un set en la base de datos donde esta guardado el id del usuario actual
 //(esto no es lo más óptimo pero no pude solucionar el cambio en el archivo data
 //y he encontrado esta solución temporal). He sacrificado tiempo de ejecución

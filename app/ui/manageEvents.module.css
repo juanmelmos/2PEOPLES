@@ -1,0 +1,49 @@
+.label {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+}
+
+.input:read-only {
+  border: none;
+  /* Quita el borde */
+  background-color: transparent;
+  /* Fondo transparente */
+  outline: none;
+  /* Quita el contorno al enfocar */
+  color: inherit;
+  /* Usa el color de texto heredado */
+  font-size: inherit;
+  /* Usa el tamaño de fuente heredado */
+  padding: 0;
+  /* Quita el relleno */
+  cursor: default;
+  /* Cambia el cursor a predeterminado */
+}
+
+.event {
+  padding: 5%;
+  border: solid #858585;
+}
+
+.eventContent {
+  display: flex;
+  align-items: center;
+}
+
+.imageContainer {
+  margin-left: 20px; /* Ajusta el margen según sea necesario */
+  position: relative;
+}
+
+.deleteButton {
+  margin: 5%;
+  padding: 5px 10px;
+  background-color: red; /* Color del botón */
+  color: white; /* Color del texto del botón */
+  border: none;
+  cursor: pointer;
+}
