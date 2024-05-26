@@ -19,7 +19,7 @@ export async function checkLogin(formdata: FormData) {
   console.log(rawFormData.user, rawFormData.password);
 
   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-  if (rows.length === 0) {
+  if (!rows || rows.length === 0) {
     redirect('/login/failLogin');
   } else {
     const id = rows.at(0).id;
@@ -40,7 +40,7 @@ export async function register(formdata: FormData) {
   console.log(rawFormData.user, rawFormData.password);
 
   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-  if (rows.length === 0) {
+  if (!rows || rows.length === 0) {
     await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
     const id = rows.at(0).id;
@@ -71,7 +71,7 @@ export async function createEvent(formdata: FormData) {
   };
 
   const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
-  if (rows.length === 0) {
+  if (!rows || rows.length === 0) {
     console.log(getId());
     await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
     revalidatePath('/events');
