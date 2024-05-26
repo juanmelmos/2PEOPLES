@@ -95,7 +95,7 @@ export async function deleteEvent(formdata: FormData) {
 //Hacer un set en la base de datos donde esta guardado el id del usuario actual
 //(esto no es lo más óptimo pero no pude solucionar el cambio en el archivo data
 //y he encontrado esta solución temporal). He sacrificado tiempo de ejecución
-//para llegar a los mínimos.
+//para llegar a los mínimos. 
 
 export async function setIdUserActual(id:number) {
   await sql`UPDATE idUser SET valor = ${id} WHERE id = 0;`;
