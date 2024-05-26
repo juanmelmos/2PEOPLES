@@ -41,7 +41,7 @@ export default function CreateEvent() {
     }
   }, 500)
 
-  const handleImageError = ()=> {
+  const handleImageError = () => {
     setErrorImage(true)
   }
 
