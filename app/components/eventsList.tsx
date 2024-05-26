@@ -22,7 +22,7 @@ export default async function Events() {
               <h2 className={style.eventTitle}>{row.nombre}</h2>
               <div className={style.overlayContent}>
                 <p>{row.descripcion}</p>
-                <p>{row.ubicacion}</p>
+                <p>Ubication: {row.ubicacion}</p>
               </div>
             </div>
           </div>
