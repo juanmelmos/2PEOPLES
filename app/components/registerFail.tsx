@@ -7,8 +7,8 @@ export default function RegisterFail() {
       <div className={style.boxIn}>
         <h1 className={style.header}>User exist</h1>
         <div className={style.linksContainer}>
-          <Link href="/register" className={style.link}>Try again</Link>
-          <Link href="/login" className={style.link}>Login</Link>
+          <Link href="/register" className={style.linkFails}>Try again</Link>
+          <Link href="/login" className={style.linkFails}>Login</Link>
         </div>
       </div>
     </div>

@@ -7,8 +7,8 @@ export default function LoginFail() {
       <div className={style.boxIn}>
         <h1 className={style.header}>User or password incorrect</h1>
         <div className={style.linksContainer}>
-          <Link href="/login" className={style.link}>Try again</Link>
-          <Link href="/register" className={style.link}>Register</Link>
+          <Link href="/login" className={style.linkFails}>Try again</Link>
+          <Link href="/register" className={style.linkFails}>Register</Link>
         </div>
       </div>
     </div>
