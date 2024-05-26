@@ -12,7 +12,7 @@ export default async function ManageEvents() {
     <>
       
         {rows.map((row, index) => (
-          <form action={deleteEvent}>
+          <form key={index} action={deleteEvent}>
           <div key={index} className={style.event}>
             <div className={style.eventContent}>
               <div className={style.overlay}>
