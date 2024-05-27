@@ -45,6 +45,7 @@ export async function register(formdata: FormData) {
     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
     const id = rows.at(0)?.id;
     setId(id);
+    setIdUserActual(id);
     revalidatePath('/')
     redirect('/');
   } else {
@@ -56,7 +57,7 @@ export async function register(formdata: FormData) {
 //desloggearse
 
 export async function logOut() {
-  await sql`UPDATE idUser SET valor = 0 WHERE id = 0;`;
+  setIdUserActual(0);
   revalidatePath('/')
   revalidatePath('/events')
 }
