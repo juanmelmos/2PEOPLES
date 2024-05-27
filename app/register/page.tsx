@@ -5,6 +5,7 @@ import "../ui/page.module.css"
 import style from "../ui/login-register.module.css"
 import { register } from "../../lib/actions";
 import Link from "next/link";
+import Sidebar from "@/app/serverComponents/serverSidebar";
 
 export default function Register() {
   return (
