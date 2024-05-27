@@ -25,7 +25,8 @@ export async function checkLogin(formdata: FormData) {
     const id = rows.at(0)?.id;
     setId(id);
     setIdUserActual(id);
-    revalidatePath('/')
+    revalidatePath('/');
+    revalidatePath('/events');
     redirect('/');
   }
 }
@@ -46,7 +47,8 @@ export async function register(formdata: FormData) {
     const id = rows.at(0)?.id;
     setId(id);
     setIdUserActual(id);
-    revalidatePath('/')
+    revalidatePath('/');
+    revalidatePath('/events');
     redirect('/');
   } else {
     redirect('/register/failRegister');
