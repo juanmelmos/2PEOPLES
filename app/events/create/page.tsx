@@ -6,7 +6,6 @@ import style from "../../ui/createEvents.module.css"
 import { createEvent } from "../../../lib/actions";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import Sidebar from "@/app/serverComponents/serverSidebar";
 
 
 const isValidUrl = (url: string) => {
@@ -47,8 +46,6 @@ export default function CreateEvent() {
   }
 
   return (
-    <>
-      <Sidebar />
       <div className={style.container}>
         <div className={style.formBox}>
           <h2 className={style.headerForm}>Create Event</h2>
@@ -89,6 +86,5 @@ export default function CreateEvent() {
           </form>
         </div>
       </div>
-    </>
   );
 }

@@ -5,13 +5,11 @@ import "../ui/page.module.css"
 import style from "../ui/login-register.module.css"
 import { checkLogin } from "../../lib/actions";
 import Link from "next/link";
-import Sidebar from "@/app/serverComponents/serverSidebar";
 
 export default function Login() {
 
   return (
     <>
-      <Sidebar />
       <div className={style.container}>
         <div className={style.formBox}>
           <h2 className={style.headerForm}>Login</h2>
