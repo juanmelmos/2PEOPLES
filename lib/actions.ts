@@ -39,7 +39,7 @@ export async function register(formdata: FormData) {
   };
   console.log(rawFormData.user, rawFormData.password);
 
-  const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
+  const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()};`;
   if (rows.length === 0) {
     await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
