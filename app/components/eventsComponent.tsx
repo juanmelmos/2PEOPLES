@@ -5,6 +5,8 @@ import style from "../ui/events.module.css";
 
 export default function EventsHeader({ idUser }: { idUser: number }) {
 
+  console.log(idUser)
+
   return (
     <>
     <header className={style.header}>
