@@ -62,6 +62,7 @@ export async function logOut() {
   setIdUserActual(0);
   revalidatePath('/')
   revalidatePath('/events')
+  redirect('/')
 }
 
 //crear un evento
