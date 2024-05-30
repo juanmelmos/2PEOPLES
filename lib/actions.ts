@@ -12,8 +12,13 @@ const secret = process.env.JWT_SECRET;
 
 // test
 
+interface LoginResponse {
+  success: boolean;
+  token?: string;
+  message?: string;
+}
 
-export async function checkLogin(formData: FormData) {
+export async function checkLogin(formData: FormData): Promise<LoginResponse> {
   const user = formData.get('user')?.toString();
   const password = formData.get('password')?.toString();
 

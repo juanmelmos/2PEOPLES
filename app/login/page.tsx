@@ -19,12 +19,13 @@ export default function Login() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const result = await checkLogin(formData);
+
     if (result.success && result.token) {
       localStorage.setItem('token', result.token);
       router.push('/');
       login();
     } else {
-      alert(result.message);
+      alert(result.message || 'Login failed, please try again.');
     }
   };
 
