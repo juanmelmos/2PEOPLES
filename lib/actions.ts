@@ -5,65 +5,121 @@ import { setId } from "./data";
 import { getId } from "./data";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
+const secret = process.env.JWT_SECRET;
+
+// test
+
+
+export async function checkLogin(formData: FormData) {
+  const user = formData.get('user')?.toString();
+  const password = formData.get('password')?.toString();
+
+  if (!user || !password) {
+    return { success: false, message: 'Missing user or password' };
+  }
+
+  const { rows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+  const userRecord = rows[0];
+
+  if (userRecord && bcrypt.compareSync(password, userRecord.password)) {
+    const token = jwt.sign({ id: userRecord.id, username: userRecord.username }, secret, { expiresIn: '1h' });
+    return { success: true, token };
+  } else {
+    return { success: false, message: 'Invalid credentials' };
+  }
+}
+
+export async function registerUser(formData: FormData) {
+  const user = formData.get('user')?.toString();
+  const password = formData.get('password')?.toString();
+
+  if (!user || !password) {
+    return { success: false, message: 'Missing user or password' };
+  }
+
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  const { rows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+
+  if (rows.length === 0) {
+    await sql`INSERT INTO usuarios (username, password) VALUES (${user}, ${hashedPassword})`;
+    const { rows: newUserRows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+    const newUserRecord = newUserRows[0];
+    const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username }, secret, { expiresIn: '1h' });
+    revalidatePath('/')
+    revalidatePath('/events')
+    return { success: true, token };
+  } else {
+    return { success: false, message: 'User already exists' };
+  }
+}
+
+export async function logOut() {
+  return { success: true };
+}
+
+
 
 // importante, la información alojada aquí no se ejecutan ni se envian al
 // cliente
 
 //iniciar sesion
 
-export async function checkLogin(formdata: FormData) {
-  const rawFormData = {
-    user: formdata.get('user'),
-    password: formdata.get('password')
-  };
-  console.log(rawFormData.user, rawFormData.password);
+// export async function checkLogin(formdata: FormData) {
+//   const rawFormData = {
+//     user: formdata.get('user'),
+//     password: formdata.get('password')
+//   };
+//   console.log(rawFormData.user, rawFormData.password);
 
-  const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-  if (rows.length === 0) {
-    redirect('/login/failLogin');
-  } else {
-    const id = rows.at(0)?.id;
-    setId(id);
-    setIdUserActual(id);
-    revalidatePath('/');
-    revalidatePath('/events');
-    redirect('/');
-  }
-}
+//   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
+//   if (rows.length === 0) {
+//     redirect('/login/failLogin');
+//   } else {
+//     const id = rows.at(0)?.id;
+//     setId(id);
+//     setIdUserActual(id);
+//     revalidatePath('/');
+//     revalidatePath('/events');
+//     redirect('/');
+//   }
+// }
 
-//registrarse
+// //registrarse
 
-export async function register(formdata: FormData) {
-  const rawFormData = {
-    user: formdata.get('user'),
-    password: formdata.get('password')
-  };
-  console.log(rawFormData.user, rawFormData.password);
+// export async function register(formdata: FormData) {
+//   const rawFormData = {
+//     user: formdata.get('user'),
+//     password: formdata.get('password')
+//   };
+//   console.log(rawFormData.user, rawFormData.password);
 
-  const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()};`;
-  if (rows.length === 0) {
-    await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
-    const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-    const id = rows.at(0)?.id;
-    setId(id);
-    setIdUserActual(id);
-    revalidatePath('/');
-    revalidatePath('/events');
-    redirect('/');
-  } else {
-    redirect('/register/failRegister');
-  }
-}
+//   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()};`;
+//   if (rows.length === 0) {
+//     await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
+//     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
+//     const id = rows.at(0)?.id;
+//     setId(id);
+//     setIdUserActual(id);
+//     revalidatePath('/');
+//     revalidatePath('/events');
+//     redirect('/');
+//   } else {
+//     redirect('/register/failRegister');
+//   }
+// }
 
 
-//desloggearse
+// //desloggearse
 
-export async function logOut() {
-  setIdUserActual(0);
-  revalidatePath('/')
-  revalidatePath('/events')
-  redirect('/')
-}
+// export async function logOut() {
+//   setIdUserActual(0);
+//   revalidatePath('/')
+//   revalidatePath('/events')
+//   redirect('/')
+// }
 
 //crear un evento
 
