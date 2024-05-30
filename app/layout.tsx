@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./ui/globals.css";
 import style from "./ui/page.module.css";
-import Sidebar from "@/app/serverComponents/serverSidebar";
+import Sidebar from "@/app/components/sidebar";
 import { AuthProvider } from './context/authContext';
 
 

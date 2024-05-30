@@ -1,4 +1,4 @@
-import ManageEvents from "../serverComponents/serverManageEvents";
+import ManageEvents from "../components/manageEvents";
 
 export default function EventsPage() {
 
