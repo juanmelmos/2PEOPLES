@@ -1,4 +1,3 @@
-import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import style from "../ui/events.module.css";
 
@@ -22,9 +21,10 @@ export default function EventsList({ events }: EventsListProps) {
             <Image
               src={event.foto}
               alt={event.descripcion}
+              className={style.image}
               width={300}
               height={200}
-            />
+              />
             <div className={style.overlay}>
               <h2 className={style.eventTitle}>{event.nombre}</h2>
               <div className={style.overlayContent}>
