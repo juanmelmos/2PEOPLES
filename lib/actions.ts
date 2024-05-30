@@ -56,7 +56,7 @@ export async function registerUser(formData: FormData): Promise<RegisterResponse
 
   if (rows.length === 0) {
     await sql`INSERT INTO Users (username, password, admin) VALUES (${user}, ${hashedPassword}, false)`;
-    const { rows: newUserRows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+    const { rows: newUserRows } = await sql`SELECT * FROM Users WHERE username=${user}`;
     const newUserRecord = newUserRows[0];
     const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username, isAdmin: newUserRecord.admin }, secret, { expiresIn: '1h' });
     return { success: true, token };
