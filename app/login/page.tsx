@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const result = await checkLogin(formData);
-    if (result.success) {
+    if (result.success && result.token) {
       localStorage.setItem('token', result.token);
       router.push('/');
       login();
