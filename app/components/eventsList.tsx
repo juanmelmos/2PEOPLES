@@ -2,27 +2,34 @@ import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import style from "../ui/events.module.css";
 
+interface Event {
+  foto: string;
+  descripcion: string;
+  nombre: string;
+  ubicacion: string;
+}
 
-export default async function Events() {
+interface EventsListProps {
+  events: Event[];
+}
 
-  const { rows } = await sql`SELECT * FROM eventos;`;
-
+export default function EventsList({ events }: EventsListProps) {
   return (
     <>
-      {rows.map((row, index) => (
+      {events.map((event, index) => (
         <div key={index} className={style.event}>
           <div className={style.imageContainer}>
             <Image
-              src={row.foto}
-              alt={row.descripcion}
+              src={event.foto}
+              alt={event.descripcion}
               width={300}
               height={200}
             />
             <div className={style.overlay}>
-              <h2 className={style.eventTitle}>{row.nombre}</h2>
+              <h2 className={style.eventTitle}>{event.nombre}</h2>
               <div className={style.overlayContent}>
-                <p>{row.descripcion}</p>
-                <p>Ubication: {row.ubicacion}</p>
+                <p>{event.descripcion}</p>
+                <p>Ubication: {event.ubicacion}</p>
               </div>
             </div>
           </div>

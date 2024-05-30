@@ -4,6 +4,7 @@ import Link from "next/link";
 import style from "../ui/events.module.css";
 import { useAuth } from "../context/authContext";
 import { useEffect, useState } from 'react';
+import Search from "./searchBar";
 
 export default function EventsHeader() {
   const { isAuthenticated } = useAuth();
@@ -20,6 +21,7 @@ export default function EventsHeader() {
   return (
     <header className={style.header}>
       <h1 className={style.h1}>Explore events</h1>
+      <Search/>
       {idUser !== 0 ? (
         <Link href="/events/create" className={style.link}>Create a event</Link>
       ) : (
