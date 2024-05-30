@@ -18,6 +18,12 @@ interface LoginResponse {
   message?: string;
 }
 
+interface RegisterResponse {
+  success: boolean;
+  token?: string;
+  message?: string;
+}
+
 export async function checkLogin(formData: FormData): Promise<LoginResponse> {
   const user = formData.get('user')?.toString();
   const password = formData.get('password')?.toString();
@@ -26,18 +32,18 @@ export async function checkLogin(formData: FormData): Promise<LoginResponse> {
     return { success: false, message: 'Missing user or password' };
   }
 
-  const { rows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+  const { rows } = await sql`SELECT * FROM Users WHERE username=${user}`;
   const userRecord = rows[0];
 
   if (userRecord && bcrypt.compareSync(password, userRecord.password)) {
-    const token = jwt.sign({ id: userRecord.id, username: userRecord.username }, secret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: userRecord.id, username: userRecord.username, isAdmin: userRecord.admin }, secret, { expiresIn: '1h' });
     return { success: true, token };
   } else {
     return { success: false, message: 'Invalid credentials' };
   }
 }
 
-export async function registerUser(formData: FormData) {
+export async function registerUser(formData: FormData): Promise<RegisterResponse> {
   const user = formData.get('user')?.toString();
   const password = formData.get('password')?.toString();
 
@@ -46,15 +52,13 @@ export async function registerUser(formData: FormData) {
   }
 
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const { rows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
+  const { rows } = await sql`SELECT * FROM Users WHERE username=${user}`;
 
   if (rows.length === 0) {
-    await sql`INSERT INTO usuarios (username, password) VALUES (${user}, ${hashedPassword})`;
+    await sql`INSERT INTO Users (username, password, admin) VALUES (${user}, ${hashedPassword}, false)`;
     const { rows: newUserRows } = await sql`SELECT * FROM usuarios WHERE username=${user}`;
     const newUserRecord = newUserRows[0];
-    const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username }, secret, { expiresIn: '1h' });
-    revalidatePath('/')
-    revalidatePath('/events')
+    const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username, isAdmin: newUserRecord.admin }, secret, { expiresIn: '1h' });
     return { success: true, token };
   } else {
     return { success: false, message: 'User already exists' };

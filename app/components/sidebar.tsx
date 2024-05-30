@@ -9,29 +9,33 @@ import { logOut } from "@/lib/actions";
 import { useEffect, useState } from 'react';
 import { useAuth } from "../context/authContext";
 import { revalidatePath } from "next/cache";
+import logout from "../api/logout";
 
 //test
 
 export default function Sidebar() {
   const [idUser, setIdUser] = useState<number>(0);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1])) as { id: number };
+      const payload = JSON.parse(atob(token.split('.')[1])) as { id: number, isAdmin: boolean };
       setIdUser(payload.id);
+      setIsAdmin(payload.isAdmin);
     }
   }, [isAuthenticated]);;
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
-    await fetch('api/logout', { method: 'POST' });
+    await fetch('/api/logout', { method: 'POST' });
     setIdUser(0);
-    revalidatePath('/');
-    revalidatePath('/events');
+    setIsAdmin(false);
+    logout();
+    router.push('/')
     router.refresh();
   };
 
@@ -55,7 +59,7 @@ export default function Sidebar() {
             <Link href="/events" className={`${pathname === '/events' ? style.here : style.nothere} ${style.link}`}>Events</Link>
           </li>
         </ul>
-        {idUser === 1 && (
+        {isAdmin && (
           <Link href="/admin" className={`${pathname === '/admin' ? style.here : style.nothere} ${style.link}`}>Managing events</Link>
         )}
         {idUser !== 0 ? (

@@ -7,6 +7,7 @@ import { registerUser } from "../../lib/actions";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from '../context/authContext';
 
 
 // test
@@ -14,21 +15,20 @@ import { useRouter } from "next/navigation";
 export default function Register() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const result = await registerUser(formData);
 
-    if (result.success) {
-      if (result.token) {
-        localStorage.setItem('token', result.token);
-        router.refresh();
-      } else {
-        setError('No token received from server');
-      }
+    if (result.success && result.token) {
+      localStorage.setItem('token', result.token);
+      login();
+      router.push('/');
+      router.refresh();
     } else {
-      setError(result.message);
+      setError(result.message || 'Registration failed, please try again.');
     }
   };
 
