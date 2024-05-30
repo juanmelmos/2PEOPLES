@@ -36,8 +36,12 @@ export async function checkLogin(formData: FormData): Promise<LoginResponse> {
   const userRecord = rows[0];
 
   if (userRecord && bcrypt.compareSync(password, userRecord.password)) {
-    const token = jwt.sign({ id: userRecord.id, username: userRecord.username, isAdmin: userRecord.admin }, secret, { expiresIn: '1h' });
-    return { success: true, token };
+    if (secret) {
+      const token = jwt.sign({ id: userRecord.id, username: userRecord.username, isAdmin: userRecord.admin }, secret, { expiresIn: '1h' });
+      return { success: true, token };
+    } else {
+      return { success: false, message: 'JWT secret is not defined' };
+    }
   } else {
     return { success: false, message: 'Invalid credentials' };
   }
@@ -55,11 +59,15 @@ export async function registerUser(formData: FormData): Promise<RegisterResponse
   const { rows } = await sql`SELECT * FROM Users WHERE username=${user}`;
 
   if (rows.length === 0) {
-    await sql`INSERT INTO Users (username, password, admin) VALUES (${user}, ${hashedPassword}, false)`;
-    const { rows: newUserRows } = await sql`SELECT * FROM Users WHERE username=${user}`;
-    const newUserRecord = newUserRows[0];
-    const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username, isAdmin: newUserRecord.admin }, secret, { expiresIn: '1h' });
-    return { success: true, token };
+    if (secret) {
+      await sql`INSERT INTO Users (username, password, admin) VALUES (${user}, ${hashedPassword}, false)`;
+      const { rows: newUserRows } = await sql`SELECT * FROM Users WHERE username=${user}`;
+      const newUserRecord = newUserRows[0];
+      const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username, isAdmin: newUserRecord.admin }, secret, { expiresIn: '1h' });
+      return { success: true, token };
+    } else {
+      return { success: false, message: 'JWT secret is not defined' };
+    }
   } else {
     return { success: false, message: 'User already exists' };
   }
@@ -157,9 +165,9 @@ export async function deleteEvent(formdata: FormData) {
   const rawFormData = {
     id: formdata.get('eventId')
   };
-    await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
-    revalidatePath('/events');
-    redirect('/events');
+  await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
+  revalidatePath('/events');
+  redirect('/events');
 }
 
 //Hacer un set en la base de datos donde esta guardado el id del usuario actual
@@ -167,7 +175,7 @@ export async function deleteEvent(formdata: FormData) {
 //y he encontrado esta solución temporal). He sacrificado tiempo de ejecución
 //para llegar a los mínimos. 
 
-export async function setIdUserActual(id:number) {
+export async function setIdUserActual(id: number) {
   await sql`UPDATE idUser SET valor = ${id} WHERE id = 0;`;
 }
 
