@@ -50,3 +50,34 @@
   background-color: white;
   color: black;
 }
+
+@media (max-width: 440px) {
+
+  .logoContainer {
+    position: fixed;
+    top: -30px;
+    left: 20px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 70%;
+    margin-top: 10%;
+  }
+
+  .list {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link,
+  .logOut {
+    padding: 15px; /* Ajusta el espacio entre los elementos */
+  }
+}

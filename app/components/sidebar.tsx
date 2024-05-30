@@ -50,8 +50,8 @@ export default function Sidebar() {
           height={120}
         />
       </div>
-      <nav>
-        <ul>
+      <nav className={style.nav}>
+        <ul className={style.list}>
           <li>
             <Link href="/" className={`${pathname === '/' ? style.here : style.nothere} ${style.link}`}>Home</Link>
           </li>
