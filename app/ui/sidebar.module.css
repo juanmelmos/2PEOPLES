@@ -38,7 +38,6 @@
   font-size: inherit;
   text-decoration: none;
   padding: 10px 15px;
-  text-decoration: none;
   font-size: 18px;
   color: #fff;
   display: block;
@@ -49,6 +48,23 @@
 .logOut:hover{
   background-color: white;
   color: black;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  margin: 5px;
+}
+
+.freepik {
+  text-decoration: underline;
+}
+
+.freepik:hover,
+.freepik:focus {
+  color: #0066CC;
 }
 
 @media (max-width: 440px) {

@@ -36,6 +36,7 @@ export default function Sidebar() {
   };
 
   return (
+    <>
     <header className={styleHeader.sidebar}>
       <div className={style.logoContainer}>
         <Image
@@ -64,52 +65,10 @@ export default function Sidebar() {
           <Link href="/login" className={`${pathname === '/login' ? style.here : style.nothere} ${style.link}`}>Log In</Link>
         )}
       </nav>
+    <footer className={style.footer}>
+      Images designed by <Link href="https://www.freepik.es" target="_blank" rel="noopener noreferrer" className={style.freepik}>Freepik</Link>
+    </footer>
     </header>
+    </>
   );
 }
-
-// //real
-
-// export default function Sidebar({ idUser }: { idUser: number }) {
-
-
-//   const pathname = usePathname();
-//   return (
-//     <header className={styleHeader.sidebar}>
-//       <div className={style.logoContainer}>
-//       <Image
-//       className={style.logo}
-//         src="/logo.png"
-//         alt="Logo 2PEOPLES"
-//         width={120}
-//         height={120}
-//       />
-//       </div>
-//       <nav>
-//         <ul>
-//           <li><Link
-//             href="/"
-//             className={`${pathname === '/' ? style.here : style.nothere} ${style.link}`}
-//           >Home</Link></li>
-//           <li><Link
-//             href="/events"
-//             className={`${pathname === '/events' ? style.here : style.nothere} ${style.link}`}
-//           >Events</Link></li>
-//         </ul>
-//         {idUser === 1 ?
-//         <Link
-//         href="/admin"
-//         className={`${pathname === '/admin' ? style.here : style.nothere} ${style.link}`}
-//       >Managing events</Link> : null}
-//         {idUser !== 0 ?
-//         <form action={logOut}>
-//           <button type="submit" className={style.logOut}>LogOut</button>
-//         </form> : 
-//         <Link
-//           href="/login"
-//           className={`${pathname === '/login' ? style.here : style.nothere} ${style.link}`}
-//         >Log In</Link>}
-//       </nav>
-//     </header>
-//   )
-// }
