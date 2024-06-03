@@ -102,10 +102,12 @@ export async function createEvent(formdata: FormData) {
     image: formdata.get('image'),
     ubication: formdata.get('ubication')
   };
+  const user = await sql`SELECT username FROM users where id=${rawFormData.owner?.toString()};`;
+  const username = user.rows[0].username;
 
   const { rows } = await sql`SELECT id FROM events where name=${rawFormData.name?.toString()};`;
   if (!rows || rows.length === 0) {
-    await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${rawFormData.owner?.toString()}, ARRAY[]::integer[]);`;
+    await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${username?.toString()}, ARRAY[]::integer[]);`;
     revalidatePath('/events');
     redirect('/events');
   } else {

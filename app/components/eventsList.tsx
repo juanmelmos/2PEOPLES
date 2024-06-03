@@ -73,6 +73,8 @@ export default function EventsList({ events }: EventsListProps) {
             <div className={style.modalText}>
             <p><strong>Description: </strong>{selectedEvent.description}</p>
             <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
+            <p><strong>Owner: </strong>{selectedEvent.owner}</p>
+            <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
             </div>
           </div>
         </div>
