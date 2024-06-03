@@ -77,29 +77,29 @@ export default function EventsList({ events }: EventsListProps) {
   return (
     <>
       {!selectedEvent && events.sort((a, b) => b.id - a.id).map((event, index) => (
-          <div
-            key={index}
-            className={style.event}
-            onClick={() => handleEventClick(event)}
-          >
-            <div className={style.imageContainer}>
-              <Image
-                src={event.image}
-                alt={event.resum}
-                className={style.image}
-                width={300}
-                height={200}
-              />
-              <div className={style.overlay}>
-                <h2 className={style.eventTitle}>{event.name}</h2>
-                <div className={style.overlayContent}>
-                  <p>{event.resum}</p>
-                  <p>Ubicación: {event.ubication}</p>
-                </div>
+        <div
+          key={index}
+          className={style.event}
+          onClick={() => handleEventClick(event)}
+        >
+          <div className={style.imageContainer}>
+            <Image
+              src={event.image}
+              alt={event.resum}
+              className={style.image}
+              width={300}
+              height={200}
+            />
+            <div className={style.overlay}>
+              <h2 className={style.eventTitle}>{event.name}</h2>
+              <div className={style.overlayContent}>
+                <p>{event.resum}</p>
+                <p>Ubicación: {event.ubication}</p>
               </div>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
 
       {selectedEvent && (
         <div className={style.modal}>
@@ -119,7 +119,7 @@ export default function EventsList({ events }: EventsListProps) {
               <p><strong>Owner: </strong>{selectedEvent.owner}</p>
               <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
               <div className={style.participateContainer}>
-                {selectedEvent.participants.includes(idUser) ? (
+                {(idUser !== 0 ? (selectedEvent.participants.includes(idUser) ? (
                   <button
                     type="button"
                     className={style.participate}
@@ -135,7 +135,7 @@ export default function EventsList({ events }: EventsListProps) {
                   >
                     {buttonText}
                   </button>
-                )}
+                )) : null)}
               </div>
             </div>
           </div>
