@@ -8,6 +8,7 @@ interface EventsPageProps {
 }
 
 interface Event {
+  id: number;
   foto: string;
   descripcion: string;
   nombre: string;
@@ -23,6 +24,7 @@ export default async function Page({ searchParams }: EventsPageProps) {
   const { rows } = await query;
 
   const events: Event[] = rows.map(row => ({
+    id: row.id,
     foto: row.foto,
     descripcion: row.descripcion,
     nombre: row.nombre,

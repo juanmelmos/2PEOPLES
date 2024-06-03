@@ -5,11 +5,8 @@ import Link from "next/link";
 import style from "../ui/sidebar.module.css";
 import styleHeader from "../ui/page.module.css";
 import { usePathname, useRouter } from "next/navigation";
-import { logOut } from "@/lib/actions";
 import { useEffect, useState } from 'react';
 import { useAuth } from "../context/authContext";
-import { revalidatePath } from "next/cache";
-import logout from "../api/logout";
 
 //test
 
@@ -31,11 +28,10 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     localStorage.removeItem('token');
-    await fetch('/api/logout', { method: 'POST' });
+    logout();
     setIdUser(0);
     setIsAdmin(false);
-    logout();
-    router.push('/')
+    router.push('/');
     router.refresh();
   };
 
