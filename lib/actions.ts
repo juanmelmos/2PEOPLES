@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from "@vercel/postgres";
-import { setId } from "./data";
 import { getId } from "./data";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -24,6 +23,12 @@ interface RegisterResponse {
   message?: string;
 }
 
+function normalizeText(text: string): string {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+// login
+
 export async function checkLogin(formData: FormData): Promise<LoginResponse> {
   const user = formData.get('user')?.toString();
   const password = formData.get('password')?.toString();
@@ -32,7 +37,10 @@ export async function checkLogin(formData: FormData): Promise<LoginResponse> {
     return { success: false, message: 'Missing user or password' };
   }
 
-  const { rows } = await sql`SELECT * FROM Users WHERE username=${user}`;
+  const normalizedUser = normalizeText(user);
+  console.log(normalizedUser)
+
+  const { rows } = await sql`SELECT * FROM Users WHERE username=${normalizedUser}`;
   const userRecord = rows[0];
 
   if (userRecord && bcrypt.compareSync(password, userRecord.password)) {
@@ -47,6 +55,8 @@ export async function checkLogin(formData: FormData): Promise<LoginResponse> {
   }
 }
 
+// register
+
 export async function registerUser(formData: FormData): Promise<RegisterResponse> {
   const user = formData.get('user')?.toString();
   const password = formData.get('password')?.toString();
@@ -55,13 +65,15 @@ export async function registerUser(formData: FormData): Promise<RegisterResponse
     return { success: false, message: 'Missing user or password' };
   }
 
+  const normalizedUser = normalizeText(user);
+
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const { rows } = await sql`SELECT * FROM Users WHERE username=${user}`;
+  const { rows } = await sql`SELECT * FROM Users WHERE username=${normalizedUser}`;
 
   if (rows.length === 0) {
     if (secret) {
-      await sql`INSERT INTO Users (username, password, admin) VALUES (${user}, ${hashedPassword}, false)`;
-      const { rows: newUserRows } = await sql`SELECT * FROM Users WHERE username=${user}`;
+      await sql`INSERT INTO Users (username, password, admin) VALUES (${normalizedUser}, ${hashedPassword}, false)`;
+      const { rows: newUserRows } = await sql`SELECT * FROM Users WHERE username=${normalizedUser}`;
       const newUserRecord = newUserRows[0];
       const token = jwt.sign({ id: newUserRecord.id, username: newUserRecord.username, isAdmin: newUserRecord.admin }, secret, { expiresIn: '1h' });
       return { success: true, token };

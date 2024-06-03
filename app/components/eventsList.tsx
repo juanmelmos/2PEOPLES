@@ -7,10 +7,11 @@ import style from '../ui/events.module.css';
 
 interface Event {
   id: number;
-  foto: string;
-  descripcion: string;
-  nombre: string;
-  ubicacion: string;
+  image: string;
+  description: string;
+  resum: string;
+  name: string;
+  ubication: string;
 }
 
 interface EventsListProps {
@@ -30,7 +31,7 @@ export default function EventsList({ events }: EventsListProps) {
 
   return (
     <>
-      {events.map((event, index) => (
+      {!selectedEvent && events.map((event, index) => (
         <div
           key={index}
           className={style.event}
@@ -38,17 +39,17 @@ export default function EventsList({ events }: EventsListProps) {
         >
           <div className={style.imageContainer}>
             <Image
-              src={event.foto}
-              alt={event.descripcion}
+              src={event.image}
+              alt={event.resum}
               className={style.image}
               width={300}
               height={200}
             />
             <div className={style.overlay}>
-              <h2 className={style.eventTitle}>{event.nombre}</h2>
+              <h2 className={style.eventTitle}>{event.name}</h2>
               <div className={style.overlayContent}>
-                <p>{event.descripcion}</p>
-                <p>Ubicación: {event.ubicacion}</p>
+                <p>{event.resum}</p>
+                <p>Ubicación: {event.ubication}</p>
               </div>
             </div>
           </div>
@@ -59,15 +60,18 @@ export default function EventsList({ events }: EventsListProps) {
         <div className={style.modal}>
           <div className={style.modalContent}>
             <span className={style.closeButton} onClick={closeModal}>&times;</span>
-            <h1>{selectedEvent.nombre}</h1>
             <Image
-              src={selectedEvent.foto}
-              alt={selectedEvent.descripcion}
+              src={selectedEvent.image}
+              alt={selectedEvent.resum}
+              className={style.modalImage}
               width={600}
               height={400}
             />
-            <p>{selectedEvent.descripcion}</p>
-            <p>Ubicación: {selectedEvent.ubicacion}</p>
+            <h1>{selectedEvent.name}</h1>
+            <div className={style.modalText}>
+            <p><strong>Description: </strong>{selectedEvent.description}</p>
+            <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
+            </div>
           </div>
         </div>
       )}

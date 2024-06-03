@@ -13,7 +13,6 @@ import { useAuth } from '../context/authContext';
 // test
 
 export default function Register() {
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { login } = useAuth();
 
@@ -28,7 +27,7 @@ export default function Register() {
       router.push('/');
       router.refresh();
     } else {
-      setError(result.message || 'Registration failed, please try again.');
+      alert(result.message || 'Registration failed, please try again.');
     }
   };
 
@@ -36,7 +35,6 @@ export default function Register() {
     <div className={style.container}>
       <div className={style.formBox}>
         <h2 className={style.headerForm}>Register</h2>
-        {error && <p className={style.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <label className={style.label}>
             Username:
