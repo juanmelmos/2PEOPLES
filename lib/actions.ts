@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from "@vercel/postgres";
-import { getId } from "./data";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import jwt from 'jsonwebtoken';
@@ -124,4 +123,30 @@ export async function deleteEvent(formdata: FormData) {
   await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
   revalidatePath('/events');
   redirect('/events');
+}
+
+// participar en un evento
+
+export async function participate(formdata: FormData) {
+  const rawFormData = {
+    idUser: formdata.get('idUser'),
+    idEvent: formdata.get('idEvent')
+  };
+
+  await sql`UPDATE events SET participants = array_append(participants, ${rawFormData.idUser?.toString()}) WHERE id = ${rawFormData.idEvent?.toString()};`;
+  revalidatePath('/events')
+  console.log(rawFormData.idUser, rawFormData.idEvent)
+}
+
+// salir del evento
+
+export async function exitEvent(formdata: FormData) {
+  const rawFormData = {
+    idUser: formdata.get('idUser'),
+    idEvent: formdata.get('idEvent')
+  };
+
+  await sql`UPDATE events SET participants = array_remove(participants, ${rawFormData.idUser?.toString()}) WHERE id = ${rawFormData.idEvent?.toString()};`;
+  revalidatePath('/events')
+  console.log(rawFormData.idUser, rawFormData.idEvent)
 }
