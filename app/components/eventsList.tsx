@@ -60,11 +60,11 @@ export default function EventsList({ events }: EventsListProps) {
 
   const handleExitEventClick = async (event: Event) => {
     setButtonText('Participate');
-  
+
     const formData = new FormData();
     formData.append('idUser', idUser.toString());
     formData.append('idEvent', event.id.toString());
-  
+
     await exitEvent(formData);
     event.participants = event.participants.filter(participant => participant !== idUser);
     setSelectedEvent({ ...event });
@@ -76,30 +76,30 @@ export default function EventsList({ events }: EventsListProps) {
 
   return (
     <>
-      {!selectedEvent && events.map((event, index) => (
-        <div
-          key={index}
-          className={style.event}
-          onClick={() => handleEventClick(event)}
-        >
-          <div className={style.imageContainer}>
-            <Image
-              src={event.image}
-              alt={event.resum}
-              className={style.image}
-              width={300}
-              height={200}
-            />
-            <div className={style.overlay}>
-              <h2 className={style.eventTitle}>{event.name}</h2>
-              <div className={style.overlayContent}>
-                <p>{event.resum}</p>
-                <p>Ubicación: {event.ubication}</p>
+      {!selectedEvent && events.sort((a, b) => b.id - a.id).map((event, index) => (
+          <div
+            key={index}
+            className={style.event}
+            onClick={() => handleEventClick(event)}
+          >
+            <div className={style.imageContainer}>
+              <Image
+                src={event.image}
+                alt={event.resum}
+                className={style.image}
+                width={300}
+                height={200}
+              />
+              <div className={style.overlay}>
+                <h2 className={style.eventTitle}>{event.name}</h2>
+                <div className={style.overlayContent}>
+                  <p>{event.resum}</p>
+                  <p>Ubicación: {event.ubication}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
 
       {selectedEvent && (
         <div className={style.modal}>
@@ -114,29 +114,29 @@ export default function EventsList({ events }: EventsListProps) {
             />
             <h1>{selectedEvent.name}</h1>
             <div className={style.modalText}>
-            <p><strong>Description: </strong>{selectedEvent.description}</p>
-            <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
-            <p><strong>Owner: </strong>{selectedEvent.owner}</p>
-            <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
-            
-            {selectedEvent.participants.includes(idUser) ? (
-          <button 
-            type="button"
-            className={style.participate}
-            onClick={() => handleExitEventClick(selectedEvent)}
-          >
-            Exit
-          </button>
-        ) : (
-          <button 
-            type="button"
-            className={style.participate}
-            onClick={() => handleParticipateClick(selectedEvent)}
-          >
-            {buttonText}
-          </button>
-        )}
-
+              <p><strong>Description: </strong>{selectedEvent.description}</p>
+              <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
+              <p><strong>Owner: </strong>{selectedEvent.owner}</p>
+              <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
+              <div className={style.participateContainer}>
+                {selectedEvent.participants.includes(idUser) ? (
+                  <button
+                    type="button"
+                    className={style.participate}
+                    onClick={() => handleExitEventClick(selectedEvent)}
+                  >
+                    Exit
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className={style.participate}
+                    onClick={() => handleParticipateClick(selectedEvent)}
+                  >
+                    {buttonText}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
