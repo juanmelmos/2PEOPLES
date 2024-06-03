@@ -7,9 +7,11 @@ import { revalidatePath } from "next/cache";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-const secret = process.env.JWT_SECRET;
 
-// test
+// importante, la información alojada aquí no se ejecutan ni se envian al
+// cliente
+
+const secret = process.env.JWT_SECRET;
 
 interface LoginResponse {
   success: boolean;
@@ -89,81 +91,21 @@ export async function logOut() {
   return { success: true };
 }
 
-
-
-// importante, la información alojada aquí no se ejecutan ni se envian al
-// cliente
-
-//iniciar sesion
-
-// export async function checkLogin(formdata: FormData) {
-//   const rawFormData = {
-//     user: formdata.get('user'),
-//     password: formdata.get('password')
-//   };
-//   console.log(rawFormData.user, rawFormData.password);
-
-//   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-//   if (rows.length === 0) {
-//     redirect('/login/failLogin');
-//   } else {
-//     const id = rows.at(0)?.id;
-//     setId(id);
-//     setIdUserActual(id);
-//     revalidatePath('/');
-//     revalidatePath('/events');
-//     redirect('/');
-//   }
-// }
-
-// //registrarse
-
-// export async function register(formdata: FormData) {
-//   const rawFormData = {
-//     user: formdata.get('user'),
-//     password: formdata.get('password')
-//   };
-//   console.log(rawFormData.user, rawFormData.password);
-
-//   const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()};`;
-//   if (rows.length === 0) {
-//     await sql`INSERT INTO usuarios (username, password) VALUES (${rawFormData.user?.toString()}, ${rawFormData.password?.toString()});`;
-//     const { rows } = await sql`SELECT id FROM usuarios where username=${rawFormData.user?.toString()} and password=${rawFormData.password?.toString()};`;
-//     const id = rows.at(0)?.id;
-//     setId(id);
-//     setIdUserActual(id);
-//     revalidatePath('/');
-//     revalidatePath('/events');
-//     redirect('/');
-//   } else {
-//     redirect('/register/failRegister');
-//   }
-// }
-
-
-// //desloggearse
-
-// export async function logOut() {
-//   setIdUserActual(0);
-//   revalidatePath('/')
-//   revalidatePath('/events')
-//   redirect('/')
-// }
-
 //crear un evento
 
 export async function createEvent(formdata: FormData) {
   const rawFormData = {
+    owner: formdata.get('owner'),
     name: formdata.get('name'),
+    resum: formdata.get('resum'),
     description: formdata.get('description'),
     image: formdata.get('image'),
     ubication: formdata.get('ubication')
   };
 
-  const { rows } = await sql`SELECT id FROM eventos where nombre=${rawFormData.name?.toString()} and descripcion=${rawFormData.description?.toString()} and ubicacion=${rawFormData.ubication?.toString()};`;
+  const { rows } = await sql`SELECT id FROM events where name=${rawFormData.name?.toString()};`;
   if (!rows || rows.length === 0) {
-    console.log(getId());
-    await sql`INSERT INTO eventos (nombre, descripcion, foto, ubicacion) VALUES (${rawFormData.name?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()});`;
+    await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${rawFormData.owner?.toString()}, ARRAY[]::integer[]);`;
     revalidatePath('/events');
     redirect('/events');
   } else {
@@ -180,18 +122,4 @@ export async function deleteEvent(formdata: FormData) {
   await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
   revalidatePath('/events');
   redirect('/events');
-}
-
-//Hacer un set en la base de datos donde esta guardado el id del usuario actual
-//(esto no es lo más óptimo pero no pude solucionar el cambio en el archivo data
-//y he encontrado esta solución temporal). He sacrificado tiempo de ejecución
-//para llegar a los mínimos. 
-
-export async function setIdUserActual(id: number) {
-  await sql`UPDATE idUser SET valor = ${id} WHERE id = 0;`;
-}
-
-export async function getIdUserActual() {
-  const { rows } = await sql`SELECT valor FROM idUser where id=0;`;
-  return rows.at(0)?.valor;
 }

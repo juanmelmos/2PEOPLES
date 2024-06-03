@@ -12,6 +12,8 @@ interface Event {
   resum: string;
   name: string;
   ubication: string;
+  owner: number;
+  participants: number[];
 }
 
 interface EventsListProps {

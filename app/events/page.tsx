@@ -9,26 +9,32 @@ interface EventsPageProps {
 
 interface Event {
   id: number;
-  foto: string;
-  descripcion: string;
-  nombre: string;
-  ubicacion: string;
+  image: string;
+  description: string;
+  resum: string;
+  name: string;
+  ubication: string;
+  owner: number;
+  participants: number[];
 }
 
 export default async function Page({ searchParams }: EventsPageProps) {
   const searchQuery = typeof searchParams.search === 'string' ? searchParams.search : '';
   const query = searchQuery 
-    ? sql`SELECT * FROM eventos WHERE nombre ILIKE ${'%' + searchQuery + '%'};`
-    : sql`SELECT * FROM eventos;`;
+    ? sql`SELECT * FROM events WHERE nombre ILIKE ${'%' + searchQuery + '%'};`
+    : sql`SELECT * FROM events;`;
 
   const { rows } = await query;
 
   const events: Event[] = rows.map(row => ({
     id: row.id,
-    foto: row.foto,
-    descripcion: row.descripcion,
-    nombre: row.nombre,
-    ubicacion: row.ubicacion
+    image: row.image,
+    description: row.description,
+    resum: row.resum,
+    name: row.name,
+    ubication: row.ubication,
+    owner: row.owner,
+    participants: row.participants
   }));
 
   return (

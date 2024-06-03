@@ -4,8 +4,9 @@ import "../../ui/globals.css";
 import "../../ui/page.module.css"
 import style from "../../ui/createEvents.module.css"
 import { createEvent } from "../../../lib/actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useAuth } from "@/app/context/authContext";
 
 
 const isValidUrl = (url: string) => {
@@ -23,6 +24,16 @@ export default function CreateEvent() {
   const [isImageValid, setIsImageValid] = useState(false);
   const [formatNotAccepted, setIsAccepted] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const [idUser, setIdUser] = useState<number>(0);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1])) as { id: number };
+      setIdUser(payload.id);
+    }
+  }, [isAuthenticated]);
 
   const handleImageChange = useDebouncedCallback((img: string) => {
     if (isValidUrl(img)) {
@@ -50,14 +61,20 @@ export default function CreateEvent() {
         <div className={style.formBox}>
           <h2 className={style.headerForm}>Create Event</h2>
           <form action={createEvent}>
+            <input name="owner" defaultValue={idUser} className={style.inputID}></input>
             <label className={style.label}>
               Name:
               <input type="text" name="name" required className={style.input} />
             </label>
             <br />
             <label className={style.label}>
+              Resum (30 characters):
+              <input type="text" name="resum" maxLength={50} required className={style.input} />
+            </label>
+            <br />
+            <label className={style.label}>
               Description:
-              <input type="text" name="description" required className={style.input} />
+              <textarea name="description" rows={4} cols={33} required className={style.input} />
             </label>
             <br />
             <label className={style.label}>
