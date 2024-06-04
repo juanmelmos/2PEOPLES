@@ -16,6 +16,7 @@ interface Event {
   ubication: string;
   owner: number;
   participants: number[];
+  date: string;
 }
 
 interface EventsListProps {
@@ -91,6 +92,34 @@ export default function EventsList({ events }: EventsListProps) {
     setIsEditing(false);
   };
 
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+
+    //Intl.DateTimeFormatOptions hace que pasandole estas opciones y despues la
+    //date en formato de Date, no en String, te la muestre como esta establecida
+    //internacionalmente
+    //Chat GPT hizo esto con ya que manejar fechas se complica bastante
+
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false,
+      timeZoneName: 'short'
+    };
+
+    const formatter = new Intl.DateTimeFormat(undefined, options);
+    let formattedDate = formatter.format(date);
+
+    //Poner la primera letra en mayúsculas
+    formattedDate = formattedDate.replace(/^\w/, (c) => c.toUpperCase());
+
+    return formattedDate;
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -140,6 +169,7 @@ export default function EventsList({ events }: EventsListProps) {
                 <h1>{selectedEvent.name}</h1>
                 <div className={style.modalText}>
                   <p><strong>Description: </strong>{selectedEvent.description}</p>
+                  <p><strong>Date: </strong>{formatDate(selectedEvent.date.toString())}</p>
                   <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
                   <p><strong>Owner: </strong>{selectedEvent.owner}</p>
                   <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>

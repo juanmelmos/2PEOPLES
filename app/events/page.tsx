@@ -16,15 +16,19 @@ interface Event {
   ubication: string;
   owner: number;
   participants: number[];
+  date: string;
 }
 
 export default async function Page({ searchParams }: EventsPageProps) {
   const searchQuery = typeof searchParams.search === 'string' ? searchParams.search : '';
   const query = searchQuery 
-    ? sql`SELECT * FROM events WHERE name ILIKE ${'%' + searchQuery + '%'} or owner ILIKE ${'%' + searchQuery + '%'};`
-    : sql`SELECT * FROM events;`;
+    ? sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events WHERE name ILIKE ${'%' + searchQuery + '%'} or owner ILIKE ${'%' + searchQuery + '%'};`
+    : sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events;`;
 
   const { rows } = await query;
+
+  console.log(rows[0].date.toString());
+  
 
   const events: Event[] = rows.map(row => ({
     id: row.id,
@@ -34,7 +38,8 @@ export default async function Page({ searchParams }: EventsPageProps) {
     name: row.name,
     ubication: row.ubication,
     owner: row.owner,
-    participants: row.participants
+    participants: row.participants,
+    date: row.date
   }));
 
   return (
