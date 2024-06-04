@@ -120,7 +120,12 @@ export default function EventsList({ events }: EventsListProps) {
     return formattedDate;
   }
 
-  const sortedEventsByDate = events.sort((a, b) => {
+  const now = new Date(); // Fecha y hora actual
+
+  // Filtrar los eventos que aún no han pasado
+  const futureEvents = events.filter(event => new Date(event.date) > now);
+
+  const sortedEventsByDate = futureEvents.sort((a, b) => {
     return new Date(a.date).getTime() - new Date(b.date).getTime();
   });
 

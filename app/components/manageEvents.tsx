@@ -8,9 +8,6 @@ export default async function ManageEvents() {
 
   const { rows } = await sql`SELECT * FROM events ORDER BY date;`;
 
-  console.log(rows);
-  
-
   return (
     <>
       
