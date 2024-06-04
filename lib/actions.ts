@@ -33,6 +33,7 @@ interface Event {
   ubication: string;
   owner: number;
   participants: number[];
+  date: string;
 }
 
 function normalizeText(text: string): string {
@@ -180,6 +181,6 @@ export async function isMine(username:string, idUser:number) {
 
 export async function editEvent(event: Event) {
 
-  await sql`UPDATE events SET name=${event.name}, resum=${event.resum}, description=${event.description}, image=${event.image}, ubication=${event.ubication} WHERE id = ${event.id};`;
+  await sql`UPDATE events SET name=${event.name}, resum=${event.resum}, description=${event.description}, image=${event.image}, ubication=${event.ubication}, date=${event.date} WHERE id = ${event.id};`;
 
 }

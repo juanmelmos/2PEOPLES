@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from '../ui/createEvents.module.css';
 import { useDebouncedCallback } from "use-debounce";
 
@@ -11,6 +11,7 @@ interface Event {
   ubication: string;
   owner: number;
   participants: number[];
+  date: string;
 }
 
 interface EditEventFormProps {
@@ -35,6 +36,11 @@ export default function EditEventForm({ event, onSave, onCancel }: EditEventForm
   const [isImageValid, setIsImageValid] = useState(true);
   const [formatNotAccepted, setIsAccepted] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
+
+  useEffect(() => {
+    setFormData({ ...event }); // Actualiza el estado del formulario cuando el evento cambie
+    setImageUrl(event.image);
+  }, [event])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -66,6 +72,16 @@ export default function EditEventForm({ event, onSave, onCancel }: EditEventForm
   const handleImageError = () => {
     setErrorImage(true)
   }
+
+  const formatDateForInput = (dateString: string): string => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   return (
     <form onSubmit={handleSubmit} className={style.editForm}>
@@ -105,10 +121,19 @@ export default function EditEventForm({ event, onSave, onCancel }: EditEventForm
         <input
           type="text"
           name="ubication"
-          value={formData.ubication}
+          defaultValue={formData.ubication}
           className={style.input}
           onChange={handleChange}
         />
+      </label>
+      <label className={style.label}>
+        Date:
+        <input 
+        type="datetime-local" 
+        name="date"
+        value={formatDateForInput(formData.date)}
+        className={style.input}
+        onChange={handleChange} />
       </label>
       <label className={style.label}>
         Image(URL):
@@ -128,9 +153,9 @@ export default function EditEventForm({ event, onSave, onCancel }: EditEventForm
           </div>)}
         {formatNotAccepted ? <p className={style.notImg}>Format not accepted</p> : null}
         <br />
-          {(isImageValid && !errorImage) ? <button type="submit" className={style.save}>Save</button> :
-            <button type="submit" disabled className={style.save}>Save</button>}
-          <button type="button" className={style.cancel} onClick={onCancel}>Cancel</button>
+        {(isImageValid && !errorImage) ? <button type="submit" className={style.save}>Save</button> :
+          <button type="submit" disabled className={style.save}>Save</button>}
+        <button type="button" className={style.cancel} onClick={onCancel}>Cancel</button>
       </div>
     </form>
   );
