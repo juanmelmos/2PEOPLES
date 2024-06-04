@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from '../ui/events.module.css';
 import { useAuth } from '../context/authContext';
-import { exitEvent, participate } from '@/lib/actions';
-
+import { exitEvent, participate, isMine, deleteEvent, editEvent } from '@/lib/actions';
+import EditEventForm from './editEventForm';
 
 interface Event {
   id: number;
@@ -24,10 +24,12 @@ interface EventsListProps {
 
 export default function EventsList({ events }: EventsListProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const { isAuthenticated } = useAuth();
   const [idUser, setIdUser] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [buttonText, setButtonText] = useState('Participate');
+  const [isMyEvent, setMyEvent] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -38,12 +40,17 @@ export default function EventsList({ events }: EventsListProps) {
     setIsLoading(false);
   }, [isAuthenticated]);
 
-  const handleEventClick = (event: Event) => {
+  const handleEventClick = async (event: Event) => {
     setSelectedEvent(event);
+    setMyEvent(await isMine(event.owner.toString(), idUser));
+    console.log('Es miu evento', isMyEvent)
   };
 
   const closeModal = () => {
     setSelectedEvent(null);
+    setMyEvent(false);
+    setIsEditing(false);
+    console.log('Es miu evento', isMyEvent)
   };
 
   const handleParticipateClick = async (event: Event) => {
@@ -68,6 +75,22 @@ export default function EventsList({ events }: EventsListProps) {
     await exitEvent(formData);
     event.participants = event.participants.filter(participant => participant !== idUser);
     setSelectedEvent({ ...event });
+  };
+
+  const handleDeleteEventClick = async (event: Event) => {
+    const formData = new FormData();
+    formData.append('idEvent', event.id.toString());
+    await deleteEvent(formData);
+  };
+
+  const handleEditEvent = (event: Event) => {
+    setIsEditing(true);
+  };
+
+  const handleSaveEvent = (updatedEvent: Event) => {
+    editEvent(updatedEvent);
+    setSelectedEvent(updatedEvent);
+    setIsEditing(false);
   };
 
   if (isLoading) {
@@ -105,39 +128,64 @@ export default function EventsList({ events }: EventsListProps) {
         <div className={style.modal}>
           <div className={style.modalContent}>
             <span className={style.closeButton} onClick={closeModal}>&times;</span>
-            <Image
-              src={selectedEvent.image}
-              alt={selectedEvent.resum}
-              className={style.modalImage}
-              width={600}
-              height={400}
-            />
-            <h1>{selectedEvent.name}</h1>
-            <div className={style.modalText}>
-              <p><strong>Description: </strong>{selectedEvent.description}</p>
-              <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
-              <p><strong>Owner: </strong>{selectedEvent.owner}</p>
-              <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
-              <div className={style.participateContainer}>
-                {(idUser !== 0 ? (selectedEvent.participants.includes(idUser) ? (
-                  <button
-                    type="button"
-                    className={style.participate}
-                    onClick={() => handleExitEventClick(selectedEvent)}
-                  >
-                    Exit
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className={style.participate}
-                    onClick={() => handleParticipateClick(selectedEvent)}
-                  >
-                    {buttonText}
-                  </button>
-                )) : null)}
-              </div>
-            </div>
+            {isEditing ? (
+              <EditEventForm event={selectedEvent} onSave={handleSaveEvent} onCancel={closeModal} />
+            ) : (
+              <>
+                <Image
+                  src={selectedEvent.image}
+                  alt={selectedEvent.resum}
+                  className={style.modalImage}
+                  width={600}
+                  height={400}
+                />
+                <h1>{selectedEvent.name}</h1>
+                <div className={style.modalText}>
+                  <p><strong>Description: </strong>{selectedEvent.description}</p>
+                  <p><strong>Ubication: </strong>{selectedEvent.ubication}</p>
+                  <p><strong>Owner: </strong>{selectedEvent.owner}</p>
+                  <p><strong>Participants: </strong>{selectedEvent.participants.length}</p>
+                  <div className={style.participateContainer}>
+                    {(idUser !== 0 ? (selectedEvent.participants.includes(idUser) ? (
+                      <button
+                        type="button"
+                        className={style.participate}
+                        onClick={() => handleExitEventClick(selectedEvent)}
+                      >
+                        Exit
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className={style.participate}
+                        onClick={() => handleParticipateClick(selectedEvent)}
+                      >
+                        {buttonText}
+                      </button>
+                    )) : null)}
+
+                    {isMyEvent ? (
+                      <>
+                        <button
+                          type="button"
+                          className={style.participate}
+                          onClick={() => handleEditEvent(selectedEvent)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className={`${style.participate} ${style.delete}`}
+                          onClick={() => handleDeleteEventClick(selectedEvent)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

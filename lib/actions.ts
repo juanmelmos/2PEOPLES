@@ -24,6 +24,17 @@ interface RegisterResponse {
   message?: string;
 }
 
+interface Event {
+  id: number;
+  image: string;
+  description: string;
+  resum: string;
+  name: string;
+  ubication: string;
+  owner: number;
+  participants: number[];
+}
+
 function normalizeText(text: string): string {
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
@@ -120,7 +131,7 @@ export async function deleteEvent(formdata: FormData) {
   const rawFormData = {
     id: formdata.get('eventId')
   };
-  await sql`DELETE FROM eventos WHERE id= ${rawFormData.id?.toString()};`;
+  await sql`DELETE FROM events WHERE id= ${rawFormData.id?.toString()};`;
   revalidatePath('/events');
   redirect('/events');
 }
@@ -149,4 +160,25 @@ export async function exitEvent(formdata: FormData) {
   await sql`UPDATE events SET participants = array_remove(participants, ${rawFormData.idUser?.toString()}) WHERE id = ${rawFormData.idEvent?.toString()};`;
   revalidatePath('/events')
   console.log(rawFormData.idUser, rawFormData.idEvent)
+}
+
+// comprobar si el evento es mio
+
+export async function isMine(username:string, idUser:number) {
+  
+  const { rows } = await sql`SELECT * FROM users where id=${idUser} and username=${username};`;
+  if (!rows || rows.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+  
+}
+
+// editar un evento
+
+export async function editEvent(event: Event) {
+
+  await sql`UPDATE events SET name=${event.name}, resum=${event.resum}, description=${event.description}, image=${event.image}, ubication=${event.ubication} WHERE id = ${event.id};`;
+
 }

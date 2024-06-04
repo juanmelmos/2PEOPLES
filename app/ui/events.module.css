@@ -188,7 +188,7 @@
 
 .participateContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   margin: 10px;
 }
@@ -207,4 +207,10 @@
   border-radius: 5px;
   transition: background-color 0.3s, color 0.3s;
   min-height: 50px;
+  cursor: pointer;
+}
+
+.delete {
+  background-color: red;
+  border: 2px solid #4e0101;
 }
