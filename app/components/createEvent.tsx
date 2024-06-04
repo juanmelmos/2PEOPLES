@@ -102,6 +102,11 @@ export default function CreateEvent() {
             {formatNotAccepted ? <p className={style.notImg}>Format not accepted</p> : null}
             <br />
             <label className={style.label}>
+              Date:
+              <input type="datetime-local" name="date" required className={style.input} />
+            </label>
+            <br />
+            <label className={style.label}>
               Ubication:
               <input type="text" name="ubication" required className={style.input} />
             </label>

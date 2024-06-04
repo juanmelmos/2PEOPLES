@@ -110,14 +110,15 @@ export async function createEvent(formdata: FormData) {
     resum: formdata.get('resum'),
     description: formdata.get('description'),
     image: formdata.get('image'),
-    ubication: formdata.get('ubication')
+    ubication: formdata.get('ubication'),
+    date: formdata.get('date')
   };
   const user = await sql`SELECT username FROM users where id=${rawFormData.owner?.toString()};`;
   const username = user.rows[0].username;
 
   const { rows } = await sql`SELECT id FROM events where name=${rawFormData.name?.toString()};`;
   if (!rows || rows.length === 0) {
-    await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${username?.toString()}, ARRAY[]::integer[]);`;
+    await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants, date) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${username?.toString()}, ARRAY[]::integer[], ${rawFormData.date?.toString()});`;
     revalidatePath('/events');
     redirect('/events');
   } else {
