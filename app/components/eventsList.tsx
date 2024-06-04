@@ -120,13 +120,17 @@ export default function EventsList({ events }: EventsListProps) {
     return formattedDate;
   }
 
+  const sortedEventsByDate = events.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <>
-      {!selectedEvent && events.sort((a, b) => b.id - a.id).map((event, index) => (
+      {!selectedEvent && sortedEventsByDate.map((event, index) => (
         <div
           key={index}
           className={style.event}

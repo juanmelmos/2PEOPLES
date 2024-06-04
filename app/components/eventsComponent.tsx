@@ -19,6 +19,7 @@ export default function EventsHeader() {
   }, [isAuthenticated]);
 
   return (
+    <>
     <header className={style.header}>
       <h1 className={style.h1}>Explore events</h1>
       <Search/>
@@ -28,5 +29,7 @@ export default function EventsHeader() {
         <p className={style.link}>Log in to create an event</p>
       )}
     </header>
+    <h4 className={style.h4}>(Ordered by upcoming events to furthest)</h4>
+    </>
   );
 }

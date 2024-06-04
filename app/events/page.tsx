@@ -26,8 +26,6 @@ export default async function Page({ searchParams }: EventsPageProps) {
     : sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events;`;
 
   const { rows } = await query;
-
-  console.log(rows[0].date.toString());
   
 
   const events: Event[] = rows.map(row => ({
