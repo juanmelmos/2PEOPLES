@@ -6,7 +6,7 @@ import { deleteEvent } from "@/lib/actions";
 
 export default async function ManageEvents() {
 
-  const { rows } = await sql`SELECT * FROM eventos;`;
+  const { rows } = await sql`SELECT * FROM events;`;
 
   return (
     <>
