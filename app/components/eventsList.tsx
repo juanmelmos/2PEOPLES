@@ -43,14 +43,12 @@ export default function EventsList({ events }: EventsListProps) {
   const handleEventClick = async (event: Event) => {
     setSelectedEvent(event);
     setMyEvent(await isMine(event.owner.toString(), idUser));
-    console.log('Es miu evento', isMyEvent)
   };
 
   const closeModal = () => {
     setSelectedEvent(null);
     setMyEvent(false);
     setIsEditing(false);
-    console.log('Es miu evento', isMyEvent)
   };
 
   const handleParticipateClick = async (event: Event) => {

@@ -21,7 +21,7 @@ interface Event {
 export default async function Page({ searchParams }: EventsPageProps) {
   const searchQuery = typeof searchParams.search === 'string' ? searchParams.search : '';
   const query = searchQuery 
-    ? sql`SELECT * FROM events WHERE nombre ILIKE ${'%' + searchQuery + '%'};`
+    ? sql`SELECT * FROM events WHERE name ILIKE ${'%' + searchQuery + '%'} or owner ILIKE ${'%' + searchQuery + '%'};`
     : sql`SELECT * FROM events;`;
 
   const { rows } = await query;
