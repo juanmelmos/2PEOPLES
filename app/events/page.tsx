@@ -22,7 +22,7 @@ interface Event {
 export default async function Page({ searchParams }: EventsPageProps) {
   const searchQuery = typeof searchParams.search === 'string' ? searchParams.search : '';
   const query = searchQuery 
-    ? sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events WHERE name ILIKE ${'%' + searchQuery + '%'} or owner ILIKE ${'%' + searchQuery + '%'};`
+    ? sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events WHERE name ILIKE ${'%' + searchQuery + '%'} or owner = ${searchQuery};`
     : sql`SELECT id, image, description, resum, name, ubication, owner, participants, date FROM events;`;
 
   const { rows } = await query;

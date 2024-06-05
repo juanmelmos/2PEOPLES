@@ -101,6 +101,7 @@
   color: white;
   padding: 5%;
   opacity: 1;
+  background-color: rgba(0, 0, 0, 0.8);
   transition: opacity 0.3s ease;
   max-width: 100%;
   overflow: hidden;
@@ -114,7 +115,7 @@
 .event:hover .overlay {
   top: 0;
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .event:hover .overlayContent {
