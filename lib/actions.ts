@@ -135,7 +135,7 @@ export async function deleteEvent(formdata: FormData) {
   };
   await sql`DELETE FROM events WHERE id= ${rawFormData.id?.toString()};`;
   revalidatePath('/events');
-  redirect('/events');
+  redirect('/');
 }
 
 // participar en un evento

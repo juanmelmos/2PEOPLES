@@ -41,6 +41,8 @@ export default function EventsList({ events }: EventsListProps) {
     setIsLoading(false);
   }, [isAuthenticated]);
 
+
+  // Handle para mostrar los detalles del evento
   const handleEventClick = async (event: Event) => {
     setSelectedEvent(event);
     setMyEvent(await isMine(event.owner.toString(), idUser));
@@ -52,8 +54,9 @@ export default function EventsList({ events }: EventsListProps) {
     setIsEditing(false);
   };
 
+  // Handle para participar en el evento
   const handleParticipateClick = async (event: Event) => {
-    setButtonText('Inside');
+    setButtonText('Exit');
 
     const formData = new FormData();
     formData.append('idUser', idUser.toString());
@@ -64,6 +67,7 @@ export default function EventsList({ events }: EventsListProps) {
     setSelectedEvent({ ...event });
   };
 
+  // Handle para salirse del evento
   const handleExitEventClick = async (event: Event) => {
     setButtonText('Participate');
 
@@ -76,29 +80,36 @@ export default function EventsList({ events }: EventsListProps) {
     setSelectedEvent({ ...event });
   };
 
+
+  // Handle para eliminar el evento
   const handleDeleteEventClick = async (event: Event) => {
     const formData = new FormData();
-    formData.append('idEvent', event.id.toString());
+    formData.append('eventId', event.id.toString());
     await deleteEvent(formData);
   };
 
+  // Handle para activar el poder editar el evento
   const handleEditEvent = (event: Event) => {
     setIsEditing(true);
   };
 
+  // Handle para guardar los valores que has puesto al editar el evento
   const handleSaveEvent = (updatedEvent: Event) => {
     editEvent(updatedEvent);
     setSelectedEvent(updatedEvent);
     setIsEditing(false);
   };
 
+
+  // Función para formatear la fecha
   function formatDate(dateString: string) {
     const date = new Date(dateString);
 
     //Intl.DateTimeFormatOptions hace que pasandole estas opciones y despues la
     //date en formato de Date, no en String, te la muestre como esta establecida
     //internacionalmente
-    //Chat GPT hizo esto con ya que manejar fechas se complica bastante
+    //Chat GPT hizo esto ya que manejar fechas se complica bastante y no habia
+    //tiempo
 
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'short',
@@ -120,15 +131,17 @@ export default function EventsList({ events }: EventsListProps) {
     return formattedDate;
   }
 
-  const now = new Date(); // Fecha y hora actual
+   // Fecha y hora actual
+  const now = new Date();
 
   // Filtrar los eventos que aún no han pasado
   const futureEvents = events.filter(event => new Date(event.date) > now);
-
+  // Ordenar los eventos por fecha, de recientes a futuros
   const sortedEventsByDate = futureEvents.sort((a, b) => {
     return new Date(a.date).getTime() - new Date(b.date).getTime();
   });
 
+  // Para que aparezca loading hasta que haya conseguido el id del usuario
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -189,7 +202,6 @@ export default function EventsList({ events }: EventsListProps) {
                         className={style.participate}
                         onClick={() => handleExitEventClick(selectedEvent)}
                       >
-                        Exit
                       </button>
                     ) : (
                       <button
