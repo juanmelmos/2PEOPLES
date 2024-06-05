@@ -153,7 +153,7 @@ export default function EventsList({ events }: EventsListProps) {
               <h2 className={style.eventTitle}>{event.name}</h2>
               <div className={style.overlayContent}>
                 <p>{event.resum}</p>
-                <p>Ubicación: {event.ubication}</p>
+                <p>Ubication: {event.ubication}</p>
               </div>
             </div>
           </div>
