@@ -7,8 +7,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 
-// importante, la información alojada aquí no se ejecutan ni se envian al
-// cliente
+// importante, la información alojada aquí no se ejecutan en el cliente
 
 const secret = process.env.JWT_SECRET;
 
@@ -120,6 +119,7 @@ export async function createEvent(formdata: FormData) {
   const { rows } = await sql`SELECT id FROM events where name=${rawFormData.name?.toString()};`;
   if (!rows || rows.length === 0) {
     await sql`INSERT INTO events (name, resum, description, image, ubication, owner, participants, date) VALUES (${rawFormData.name?.toString()}, ${rawFormData.resum?.toString()}, ${rawFormData.description?.toString()}, ${rawFormData.image?.toString()}, ${rawFormData.ubication?.toString()}, ${username?.toString()}, ARRAY[]::integer[], ${rawFormData.date?.toString()});`;
+    revalidatePath('/admin');
     revalidatePath('/events');
     redirect('/events');
   } else {
@@ -183,5 +183,7 @@ export async function isMine(username:string, idUser:number) {
 export async function editEvent(event: Event) {
 
   await sql`UPDATE events SET name=${event.name}, resum=${event.resum}, description=${event.description}, image=${event.image}, ubication=${event.ubication}, date=${event.date} WHERE id = ${event.id};`;
+  revalidatePath('/events');
+  revalidatePath('/admin');
 
 }
