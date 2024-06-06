@@ -134,6 +134,7 @@ export async function deleteEvent(formdata: FormData) {
     id: formdata.get('eventId')
   };
   await sql`DELETE FROM events WHERE id= ${rawFormData.id?.toString()};`;
+  revalidatePath('/admin');
   revalidatePath('/events');
   redirect('/');
 }
