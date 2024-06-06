@@ -6,6 +6,7 @@ import style from '../ui/events.module.css';
 import { useAuth } from '../context/authContext';
 import { exitEvent, participate, isMine, deleteEvent, editEvent } from '@/lib/actions';
 import EditEventForm from './editEventForm';
+import { useRouter } from 'next/navigation';
 
 interface Event {
   id: number;
@@ -31,6 +32,7 @@ export default function EventsList({ events }: EventsListProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [buttonText, setButtonText] = useState('Participate');
   const [isMyEvent, setMyEvent] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -86,6 +88,7 @@ export default function EventsList({ events }: EventsListProps) {
     const formData = new FormData();
     formData.append('eventId', event.id.toString());
     await deleteEvent(formData);
+    router.refresh();
   };
 
   // Handle para activar el poder editar el evento
