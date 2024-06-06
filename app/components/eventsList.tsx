@@ -205,6 +205,7 @@ export default function EventsList({ events }: EventsListProps) {
                         className={style.participate}
                         onClick={() => handleExitEventClick(selectedEvent)}
                       >
+                        Exit
                       </button>
                     ) : (
                       <button
@@ -212,6 +213,7 @@ export default function EventsList({ events }: EventsListProps) {
                         className={style.participate}
                         onClick={() => handleParticipateClick(selectedEvent)}
                       >
+                        Participate
                         {buttonText}
                       </button>
                     )) : null)}
